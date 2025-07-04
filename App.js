@@ -19,9 +19,21 @@ const App = () => {
   }, [model.isReady])
 
   const pickImageFromGallery = async () => {
-    
+
+    console.log("📷 pickImageFromGallery called");
+
     try {
-      for (const ocrDetection of await model.forward("https://ik.imagekit.io/r6ee6iubj/test.jpg?updatedAt=1751621241051")) {
+      const result = await launchImageLibrary({ mediaType: 'photo' });
+
+      if (!result.assets || result.assets.length === 0) {
+        console.warn("❌ No image selected");
+        return;
+      }
+
+      const image = result.assets[0];
+      console.log("📸 Picked image:", image.uri);
+
+      for (const ocrDetection of await model.forward(image.uri)) {
         console.log("Bounding box: ", ocrDetection.bbox);
         console.log("Bounding label: ", ocrDetection.text);
         console.log("Bounding score: ", ocrDetection.score);
