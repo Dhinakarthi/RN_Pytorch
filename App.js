@@ -19,8 +19,9 @@ const App = () => {
   }, [model.isReady])
 
   const pickImageFromGallery = async () => {
+    
     try {
-      for (const ocrDetection of await model.forward("https://www.slidecow.com/wp-content/uploads/2018/04/Setting-Up-The-Slide-Text.jpg")) {
+      for (const ocrDetection of await model.forward("https://ik.imagekit.io/r6ee6iubj/test.jpg?updatedAt=1751621241051")) {
         console.log("Bounding box: ", ocrDetection.bbox);
         console.log("Bounding label: ", ocrDetection.text);
         console.log("Bounding score: ", ocrDetection.score);
