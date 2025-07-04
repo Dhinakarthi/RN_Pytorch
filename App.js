@@ -1,5 +1,7 @@
-import { Text, View } from "react-native";
+import { useEffect } from "react";
+import { Button, Text, View } from "react-native";
 import { DETECTOR_CRAFT_800, RECOGNIZER_EN_CRNN_128, RECOGNIZER_EN_CRNN_256, RECOGNIZER_EN_CRNN_512, useOCR } from "react-native-executorch";
+import { launchImageLibrary } from "react-native-image-picker";
 
 const App = () => {
   const model = useOCR({
@@ -12,16 +14,39 @@ const App = () => {
     language: "en",
   });
 
+  useEffect(() => {
+    console.log('Model Status', model.isReady)
+  }, [model.isReady])
+
+  const pickImageFromGallery = async () => {
+    try {
+      for (const ocrDetection of await model.forward("https://www.slidecow.com/wp-content/uploads/2018/04/Setting-Up-The-Slide-Text.jpg")) {
+        console.log("Bounding box: ", ocrDetection.bbox);
+        console.log("Bounding label: ", ocrDetection.text);
+        console.log("Bounding score: ", ocrDetection.score);
+      }
+    } catch (error) {
+      console.log('ERRRRR', error)
+    }
+
+  };
+
   if (!model.isReady)
     return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Model not ready</Text>
     </View>)
 
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>
+      {/* <Text>
         Hello Executorch !!!
-      </Text>
+      </Text> */}
+
+      <Button
+        title="Pick Image"
+        onPress={pickImageFromGallery}
+      />
     </View>
   )
 }
