@@ -11,13 +11,15 @@ import { launchImageLibrary } from "react-native-image-picker";
 
 const App = () => {
   const model = useOCR({
-    detectorSource: DETECTOR_CRAFT_800,
+    detectorSource: require('./asset/model.pte'),
+    // recognizerSources: require('./asset/output_model.pte'),
     recognizerSources: {
-      recognizerLarge: RECOGNIZER_EN_CRNN_512,
-      recognizerMedium: RECOGNIZER_EN_CRNN_256,
-      recognizerSmall: RECOGNIZER_EN_CRNN_128
+      recognizerLarge: require('./asset/output_model.pte'), 
+      // recognizerMedium: require('./asset/output_model.pte'),
+      // recognizerSmall: require('./asset/output_model.pte'),
     },
     language: "en",
+    preventLoad: true
   });
 
   const [loading, setLoading] = useState(false);
